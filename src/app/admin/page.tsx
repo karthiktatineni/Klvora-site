@@ -9,7 +9,7 @@ import { formatPrice } from "@/lib/utils";
 
 import { auth } from "@/lib/firebase";
 import { signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
-import { subscribeToOrders, updateOrderStatusInDb } from "@/lib/db";
+import { subscribeToOrders, updateOrderStatusInDb, subscribeToMessages } from "@/lib/db";
 
 export default function AdminDashboard() {
   const [user, setUser] = useState<any>(null);
@@ -17,8 +17,9 @@ export default function AdminDashboard() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState<any[]>([]);
+  const [messages, setMessages] = useState<any[]>([]);
   const { stocks, updateStock } = useProductStore();
-  const [activeTab, setActiveTab] = useState<"orders" | "inventory">("orders");
+  const [activeTab, setActiveTab] = useState<"orders" | "inventory" | "messages">("orders");
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
@@ -32,12 +33,12 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     if (user) {
-      console.log("Admin sub starting for:", user.email);
-      const unsubscribeOrders = subscribeToOrders((data) => {
-        console.log("Admin data received:", data.length, "orders");
-        setOrders(data);
-      });
-      return () => unsubscribeOrders();
+      const unsubscribeOrders = subscribeToOrders(setOrders);
+      const unsubscribeMessages = subscribeToMessages(setMessages);
+      return () => {
+        unsubscribeOrders();
+        unsubscribeMessages();
+      };
     }
   }, [user]);
 
@@ -128,12 +129,15 @@ export default function AdminDashboard() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-4 mb-8 border-b border-outline-variant/20">
-          <button onClick={() => setActiveTab("orders")} className={`pb-4 font-sans text-ui-button uppercase tracking-[0.05em] transition-all border-b-2 ${activeTab === "orders" ? "border-primary text-primary" : "border-transparent text-on-surface-variant hover:text-primary"}`}>
+        <div className="flex gap-4 mb-8 border-b border-outline-variant/20 overflow-x-auto scrollbar-hide">
+          <button onClick={() => setActiveTab("orders")} className={`pb-4 font-sans text-ui-button uppercase tracking-[0.05em] transition-all border-b-2 whitespace-nowrap ${activeTab === "orders" ? "border-primary text-primary" : "border-transparent text-on-surface-variant hover:text-primary"}`}>
             Orders Management
           </button>
-          <button onClick={() => setActiveTab("inventory")} className={`pb-4 font-sans text-ui-button uppercase tracking-[0.05em] transition-all border-b-2 ${activeTab === "inventory" ? "border-primary text-primary" : "border-transparent text-on-surface-variant hover:text-primary"}`}>
+          <button onClick={() => setActiveTab("inventory")} className={`pb-4 font-sans text-ui-button uppercase tracking-[0.05em] transition-all border-b-2 whitespace-nowrap ${activeTab === "inventory" ? "border-primary text-primary" : "border-transparent text-on-surface-variant hover:text-primary"}`}>
             Real-time Inventory
+          </button>
+          <button onClick={() => setActiveTab("messages" as any)} className={`pb-4 font-sans text-ui-button uppercase tracking-[0.05em] transition-all border-b-2 whitespace-nowrap ${activeTab === ("messages" as any) ? "border-primary text-primary" : "border-transparent text-on-surface-variant hover:text-primary"}`}>
+            Customer Messages
           </button>
         </div>
 
@@ -241,6 +245,34 @@ export default function AdminDashboard() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+        {activeTab === ("messages" as any) && (
+          <div className="glass-card bg-surface rounded-xl overflow-hidden border border-outline-variant/20">
+            <div className="p-6 border-b border-outline-variant/20 bg-surface-container-low/50">
+              <h2 className="font-sans text-headline-sm text-primary">Inquiry Inbox</h2>
+            </div>
+            <div className="divide-y divide-outline-variant/10">
+              {messages.map((msg) => (
+                <div key={msg.id} className="p-6 hover:bg-surface-container-low/10 transition-colors">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <h3 className="font-sans text-body-lg text-primary font-medium">{msg.name}</h3>
+                      <p className="text-[12px] text-on-surface-variant/60">{msg.email} · {msg.phone}</p>
+                    </div>
+                    <span className="text-[10px] uppercase tracking-widest text-on-surface-variant/40">
+                      {msg.createdAt?.seconds ? new Date(msg.createdAt.seconds * 1000).toLocaleDateString() : "Just now"}
+                    </span>
+                  </div>
+                  <p className="text-body-md text-on-surface-variant leading-relaxed mt-4 bg-surface-container-low/30 p-4 rounded-lg italic">
+                    "{msg.message}"
+                  </p>
+                </div>
+              ))}
+              {messages.length === 0 && (
+                <div className="p-12 text-center text-on-surface-variant">No inquiries yet.</div>
+              )}
             </div>
           </div>
         )}

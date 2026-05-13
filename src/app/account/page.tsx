@@ -42,7 +42,6 @@ export default function AccountPage() {
     try {
       if (tab === "login") {
         await signInWithEmailAndPassword(auth, email, password);
-        showToast("Welcome back!");
       } else {
         await createUserWithEmailAndPassword(auth, email, password);
         showToast("Account created successfully!");

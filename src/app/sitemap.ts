@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://aura-fashion.vercel.app";
+  const baseUrl = "https://klvora.in";
   const products = [
     "obsidian-tote", "lumen-coat", "sculptural-clutch", "arc-earrings",
     "minimalist-shoe", "wool-blazer", "silk-scarf", "leather-belt",

@@ -96,6 +96,29 @@ export const getUserProfile = (userId: string, callback: (data: any) => void) =>
   });
 };
 
+// Contact Messages
+export const saveContactMessage = async (message: any) => {
+  try {
+    await addDoc(collection(db, "messages"), {
+      ...message,
+      createdAt: serverTimestamp(),
+      status: "unread"
+    });
+  } catch (error) {
+    console.error("Error saving message:", error);
+    throw error;
+  }
+};
+
+export const subscribeToMessages = (callback: (messages: any[]) => void) => {
+  const q = query(collection(db, "messages"));
+  return onSnapshot(q, (snap) => {
+    const messages = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+      .sort((a: any, b: any) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+    callback(messages);
+  });
+};
+
 export const subscribeToCustomerOrders = (userId: string, email: string, callback: (orders: any[]) => void) => {
   // We use the most reliable nested query first, as that is the current standard
   const q = query(collection(db, "orders"), where("customer.customerId", "==", userId));

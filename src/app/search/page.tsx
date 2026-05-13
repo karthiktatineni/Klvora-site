@@ -1,13 +1,13 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useMemo } from "react";
+import { useMemo, Suspense } from "react";
 import { PRODUCTS } from "@/lib/products";
 import ProductCard from "@/components/product/ProductCard";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
-export default function SearchPage() {
+function SearchResults() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q")?.toLowerCase() || "";
 
@@ -49,5 +49,13 @@ export default function SearchPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={<div className="pt-32 text-center font-serif text-display-sm">Searching...</div>}>
+      <SearchResults />
+    </Suspense>
   );
 }

@@ -5,10 +5,10 @@ import { motion } from "framer-motion";
 import { Mail, Globe, ArrowRight } from "lucide-react";
 
 const FOOTER_LINKS = {
-  Shop: ["New Arrivals", "Bestsellers", "Collections", "Sale", "Gift Cards"],
-  About: ["Our Story", "Sustainability", "Craftsmanship", "Careers", "Press"],
+  Shop: ["New Arrivals", "Bestsellers", "Collections", "Sale"],
+  About: ["Our Story", "Sustainability", "Craftsmanship", "Press"],
   Help: ["Contact Us", "Shipping", "Returns", "Size Guide", "FAQ"],
-  Legal: ["Privacy Policy", "Terms of Service", "Cookie Policy", "Accessibility"],
+  Legal: ["Privacy Policy", "Terms of Service"],
 };
 
 export default function Footer() {
@@ -79,10 +79,12 @@ export default function Footer() {
                   <li key={link}>
                     <Link
                       href={
+                        link === "Contact Us" ? "/contact" :
+                        link === "FAQ" ? "/faq" :
+                        link === "Size Guide" ? "/size-guide" :
                         link === "New Arrivals" || link === "Bestsellers" || link === "Collections" || link === "Sale" ? "/collections" :
                         link === "Our Story" || link === "Sustainability" || link === "Craftsmanship" ? "/editorial" :
-                        link === "Archives" ? "/archives" :
-                        link === "Gift Cards" ? "/collections" :
+                        link === "Shipping" || link === "Returns" ? "/faq" :
                         "#"
                       }
                       className="font-sans text-body-sm text-silver-chrome/50 hover:text-frost transition-colors"

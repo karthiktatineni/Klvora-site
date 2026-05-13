@@ -6,6 +6,10 @@ import Footer from "@/components/layout/Footer";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import GoogleAnalytics from "@/components/providers/GoogleAnalytics";
 import Toast from "@/components/ui/Toast";
+import ChatBot from "@/components/ai/ChatBot";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import StickyToastRemover from "@/components/providers/StickyToastRemover";
 
 const serif = Bodoni_Moda({
   subsets: ["latin"],
@@ -51,7 +55,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://aura-fashion.vercel.app",
+    url: "https://klvora.in",
     siteName: "KLVORA Fashion Hub",
     title: "KLVORA — Premium Luxury Fashion",
     description: "Discover KLVORA's curated luxury fashion collections with immersive 3D experiences.",
@@ -72,7 +76,7 @@ export const metadata: Metadata = {
     creator: "@klvorafashion",
   },
   alternates: {
-    canonical: "https://aura-fashion.vercel.app",
+    canonical: "https://klvora.in",
   },
   manifest: "/manifest.json",
   icons: {
@@ -98,8 +102,8 @@ function JsonLd() {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "KLVORA Fashion Hub",
-    url: "https://klvora-fashion.vercel.app",
-    logo: "https://klvora-fashion.vercel.app/logo.png",
+    url: "https://klvora.in",
+    logo: "https://klvora.in/logo.png",
     description: "Premium luxury fashion brand offering curated collections with immersive 3D experiences.",
     sameAs: [
       "https://instagram.com/klvorafashion",
@@ -116,12 +120,12 @@ function JsonLd() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "KLVORA Fashion Hub",
-    url: "https://aura-fashion.vercel.app",
+    url: "https://klvora.in",
     potentialAction: {
       "@type": "SearchAction",
       target: {
         "@type": "EntryPoint",
-        urlTemplate: "https://aura-fashion.vercel.app/search?q={search_term_string}",
+        urlTemplate: "https://klvora.in/search?q={search_term_string}",
       },
       "query-input": "required name=search_term_string",
     },
@@ -145,12 +149,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className={`${serif.variable} ${sans.variable} font-sans bg-background text-on-surface antialiased min-h-screen`}>
         <GoogleAnalytics />
+        <StickyToastRemover />
         <Toast />
-        <SmoothScroll>
-          <Navbar />
-          <main className="min-h-screen">{children}</main>
-          <Footer />
-        </SmoothScroll>
+        <Navbar />
+        <main className="min-h-screen">{children}</main>
+        <Footer />
+        <ChatBot />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

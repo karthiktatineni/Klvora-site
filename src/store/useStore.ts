@@ -146,6 +146,11 @@ export const useUIStore = create<UIState>()(
         setTimeout(() => set({ toast: null }), 3000);
       },
     }),
-    { name: "klvora-ui" }
+    { 
+      name: "klvora-ui",
+      partialize: (state) => ({ 
+        isDarkMode: state.isDarkMode 
+      }),
+    }
   )
 );
