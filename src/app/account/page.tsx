@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { User, Package, Heart, MapPin, Bell, Settings, LogOut, Mail, Lock, Loader2 } from "lucide-react";
@@ -14,8 +14,12 @@ import {
   User as FirebaseUser
 } from "firebase/auth";
 import { useUIStore } from "@/store/useStore";
+import { useRouter, useSearchParams } from "next/navigation";
 
-export default function AccountPage() {
+function AccountContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectPath = searchParams.get("redirect") || null;
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [authLoading, setAuthLoading] = useState(false);
@@ -29,9 +33,12 @@ export default function AccountPage() {
     const unsubscribe = onAuthStateChanged(auth, (u) => {
       setUser(u);
       setLoading(false);
+      if (u && redirectPath) {
+        router.push(redirectPath);
+      }
     });
     return () => unsubscribe();
-  }, []);
+  }, [redirectPath, router]);
 
   const handleAuth = async () => {
     if (!email || !password) {
@@ -85,7 +92,6 @@ export default function AccountPage() {
             <p className="font-sans text-body-md text-on-surface-variant">Sign in to access your account</p>
           </div>
 
-          {/* Tabs */}
           <div className="flex mb-8 border-b border-outline-variant/20">
             <button onClick={() => setTab("login")} className={`flex-1 py-3 font-sans text-ui-button uppercase tracking-[0.05em] transition-colors border-b-2 ${tab === "login" ? "border-primary text-primary" : "border-transparent text-on-surface-variant/50"}`}>Sign In</button>
             <button onClick={() => setTab("register")} className={`flex-1 py-3 font-sans text-ui-button uppercase tracking-[0.05em] transition-colors border-b-2 ${tab === "register" ? "border-primary text-primary" : "border-transparent text-on-surface-variant/50"}`}>Create Account</button>
@@ -153,15 +159,6 @@ export default function AccountPage() {
     );
   }
 
-  // Logged in dashboard
-  const menuItems = [
-    { icon: Package, label: "Orders", count: 3 },
-    { icon: Heart, label: "Wishlist", href: "/wishlist" },
-    { icon: MapPin, label: "Addresses" },
-    { icon: Bell, label: "Notifications", count: 2 },
-    { icon: Settings, label: "Settings" },
-  ];
-
   return (
     <div className="pt-28 pb-20 min-h-screen max-w-[1440px] mx-auto px-6 md:px-16">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
@@ -204,5 +201,13 @@ export default function AccountPage() {
         </div>
       </motion.div>
     </div>
+  );
+}
+
+export default function AccountPage() {
+  return (
+    <Suspense fallback={<div className="pt-32 text-center font-serif text-display-sm"><Loader2 className="animate-spin inline-block mr-2" /> Loading Account...</div>}>
+      <AccountContent />
+    </Suspense>
   );
 }

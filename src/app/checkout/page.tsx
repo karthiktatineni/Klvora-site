@@ -11,8 +11,11 @@ import { formatPrice } from "@/lib/utils";
 import { saveOrder, updateProductStock, saveUserProfile, getUserProfile } from "@/lib/db";
 import { auth } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import { useRouter, usePathname } from "next/navigation";
 
 export default function CheckoutPage() {
+  const router = useRouter();
+  const pathname = usePathname();
   const { items, totalPrice, clearCart } = useCartStore();
   const { showToast } = useUIStore();
   const { addOrder } = useAdminStore();
@@ -46,10 +49,13 @@ export default function CheckoutPage() {
           }
         });
         return () => unsubProfile();
+      } else {
+        // Redirect to login if not authenticated
+        router.push(`/account?redirect=${pathname}`);
       }
     });
     return () => unsubscribe();
-  }, []);
+  }, [router, pathname]);
 
   if (items.length === 0 && step !== "success") {
     return (
