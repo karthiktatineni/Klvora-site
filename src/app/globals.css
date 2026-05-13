@@ -1,26 +1,312 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-frost: #F5F7FA;
+  --color-ice-gray: #DDE3EA;
+  --color-slate-blue: #5B6C8F;
+  --color-midnight-navy: #1B2430;
+  --color-silver-chrome: #BFC9D9;
+  --color-accent-gold: #C9A96E;
+  --color-accent-champagne: #F5E6D0;
+  --color-background: #faf9f7;
+  --color-surface: #faf9f7;
+  --color-primary: #000000;
+  --color-on-primary: #ffffff;
+  --color-secondary: #775a19;
+  --color-on-surface: #1b1c1b;
+  --color-on-surface-variant: #444748;
+  --color-outline-variant: #c4c7c7;
+  --color-surface-container: #efeeec;
+  --color-surface-container-low: #f5f3f1;
+  --color-surface-container-high: #e9e8e6;
+  --color-surface-variant: #e3e2e0;
+  --color-secondary-container: #fed488;
+  --font-family-serif: "Bodoni Moda", Georgia, serif;
+  --font-family-sans: "Hanken Grotesk", system-ui, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ============================================
+   AURA PREMIUM FASHION — GLOBAL STYLES
+   ============================================ */
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Custom selection */
+::selection {
+  background-color: var(--color-secondary-container);
+  color: var(--color-midnight-navy);
+}
+
+/* Body */
+body {
+  font-family: var(--font-family-sans);
+  background: var(--color-background);
+  color: var(--color-on-surface);
+  overflow-x: hidden;
+}
+
+/* ============================================
+   GLASSMORPHISM UTILITIES
+   ============================================ */
+
+.glass {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 0.5px solid rgba(196, 199, 199, 0.3);
+}
+
+.glass-light {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 0.5px solid rgba(196, 199, 199, 0.2);
+}
+
+.glass-dark {
+  background: rgba(27, 36, 48, 0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 0.5px solid rgba(191, 201, 217, 0.15);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 0.5px solid rgba(196, 199, 199, 0.25);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.04);
+}
+
+/* ============================================
+   AMBIENT SHADOWS
+   ============================================ */
+
+.shadow-ambient {
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.04);
+}
+
+.shadow-ambient-lg {
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.06);
+}
+
+.shadow-float {
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.10);
+}
+
+.shadow-cinematic {
+  box-shadow: 0 32px 80px rgba(27, 36, 48, 0.12);
+}
+
+/* ============================================
+   PREMIUM SCROLLBAR
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-silver-chrome);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-slate-blue);
+}
+
+/* Hide scrollbar utility */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ============================================
+   MAGNETIC BUTTON EFFECT
+   ============================================ */
+
+.magnetic-btn {
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.magnetic-btn:hover {
+  transform: scale(1.02);
+}
+
+.magnetic-btn:active {
+  transform: scale(0.98);
+}
+
+/* ============================================
+   SHIMMER / LOADING
+   ============================================ */
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface-container-low) 0%,
+    var(--color-surface-container-high) 50%,
+    var(--color-surface-container-low) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ============================================
+   TEXT GRADIENT
+   ============================================ */
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #C9A96E, #E9C176, #C9A96E);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-arctic {
+  background: linear-gradient(135deg, var(--color-slate-blue), var(--color-silver-chrome), var(--color-slate-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================
+   HOVER REVEAL CARD
+   ============================================ */
+
+.hover-reveal .hover-content {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.hover-reveal:hover .hover-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hover-reveal .hover-image {
+  transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.hover-reveal:hover .hover-image {
+  transform: scale(1.05);
+}
+
+/* ============================================
+   PARALLAX UTILITY
+   ============================================ */
+
+.parallax-slow {
+  will-change: transform;
+}
+
+/* ============================================
+   LINE REVEAL ANIMATION
+   ============================================ */
+
+.line-reveal {
+  overflow: hidden;
+}
+
+.line-reveal span {
+  display: inline-block;
+  transform: translateY(100%);
+  animation: lineReveal 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+@keyframes lineReveal {
+  to {
+    transform: translateY(0);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ============================================
+   FLOATING ANIMATION
+   ============================================ */
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 6s ease-in-out 2s infinite;
+}
+
+/* ============================================
+   LENIS SMOOTH SCROLL OVERRIDES
+   ============================================ */
+
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ============================================
+   3D CANVAS CONTAINER
+   ============================================ */
+
+.canvas-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.canvas-container canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  outline: none;
+}
+
+/* ============================================
+   RESPONSIVE TYPOGRAPHY
+   ============================================ */
+
+@media (max-width: 768px) {
+  .display-responsive {
+    font-size: 48px;
+    line-height: 52px;
+  }
+}
+
+@media (min-width: 769px) {
+  .display-responsive {
+    font-size: 80px;
+    line-height: 88px;
+  }
 }

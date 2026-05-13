@@ -1,0 +1,150 @@
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  darkMode: "class",
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        // Arctic-Inspired Premium Palette
+        frost: "#F5F7FA",
+        "ice-gray": "#DDE3EA",
+        "slate-blue": "#5B6C8F",
+        "midnight-navy": "#1B2430",
+        "silver-chrome": "#BFC9D9",
+        // AURA Design System
+        "on-background": "#1b1c1b",
+        "outline-variant": "#c4c7c7",
+        "surface-dim": "#dbdad8",
+        "on-surface-variant": "#444748",
+        outline: "#747878",
+        "surface-bright": "#faf9f7",
+        "on-surface": "#1b1c1b",
+        "surface-container-high": "#e9e8e6",
+        "primary-container": "#1c1b1b",
+        "inverse-on-surface": "#f2f0ee",
+        "surface-container-low": "#f5f3f1",
+        "primary-fixed": "#e5e2e1",
+        "inverse-surface": "#303130",
+        secondary: "#775a19",
+        "error-container": "#ffdad6",
+        "secondary-fixed-dim": "#e9c176",
+        background: "#faf9f7",
+        "on-primary": "#ffffff",
+        "tertiary-container": "#1c1c19",
+        surface: "#faf9f7",
+        "surface-container-highest": "#e3e2e0",
+        "secondary-fixed": "#ffdea5",
+        primary: "#000000",
+        "surface-variant": "#e3e2e0",
+        "on-secondary-container": "#785a1a",
+        "on-secondary": "#ffffff",
+        "surface-container": "#efeeec",
+        "on-primary-container": "#858383",
+        "surface-tint": "#5f5e5e",
+        "secondary-container": "#fed488",
+        accent: {
+          gold: "#C9A96E",
+          champagne: "#F5E6D0",
+          rose: "#E8C4C4",
+        },
+      },
+      fontFamily: {
+        serif: ["Bodoni Moda", "Georgia", "serif"],
+        sans: ["Hanken Grotesk", "system-ui", "sans-serif"],
+      },
+      fontSize: {
+        "display-xl": ["96px", { lineHeight: "104px", letterSpacing: "-0.03em", fontWeight: "400" }],
+        "display-lg": ["80px", { lineHeight: "88px", letterSpacing: "-0.02em", fontWeight: "400" }],
+        "display-md": ["64px", { lineHeight: "72px", letterSpacing: "-0.02em", fontWeight: "400" }],
+        "display-sm": ["48px", { lineHeight: "52px", letterSpacing: "-0.01em", fontWeight: "400" }],
+        "headline-lg": ["40px", { lineHeight: "48px", fontWeight: "400" }],
+        "headline-md": ["32px", { lineHeight: "40px", fontWeight: "500" }],
+        "headline-sm": ["24px", { lineHeight: "32px", fontWeight: "500" }],
+        "body-xl": ["20px", { lineHeight: "32px", letterSpacing: "0.01em", fontWeight: "400" }],
+        "body-lg": ["18px", { lineHeight: "28px", letterSpacing: "0.01em", fontWeight: "400" }],
+        "body-md": ["16px", { lineHeight: "24px", letterSpacing: "0.01em", fontWeight: "400" }],
+        "body-sm": ["14px", { lineHeight: "20px", letterSpacing: "0.01em", fontWeight: "400" }],
+        "label-caps": ["12px", { lineHeight: "16px", letterSpacing: "0.15em", fontWeight: "600" }],
+        "ui-button": ["14px", { lineHeight: "20px", letterSpacing: "0.05em", fontWeight: "500" }],
+      },
+      spacing: {
+        gutter: "32px",
+        "margin-desktop": "64px",
+        "margin-mobile": "24px",
+        "section-gap": "128px",
+        "container-max": "1440px",
+        unit: "8px",
+      },
+      borderRadius: {
+        DEFAULT: "0.125rem",
+        lg: "0.5rem",
+        xl: "1rem",
+        "2xl": "1.5rem",
+        "3xl": "2rem",
+      },
+      boxShadow: {
+        ambient: "0 20px 50px rgba(0, 0, 0, 0.04)",
+        "ambient-lg": "0 40px 80px rgba(0, 0, 0, 0.06)",
+        glass: "0 8px 32px rgba(0, 0, 0, 0.08)",
+        float: "0 24px 64px rgba(0, 0, 0, 0.10)",
+        cinematic: "0 32px 80px rgba(27, 36, 48, 0.12)",
+      },
+      backdropBlur: {
+        xs: "2px",
+        glass: "20px",
+        "glass-lg": "40px",
+      },
+      animation: {
+        "float": "float 6s ease-in-out infinite",
+        "shimmer": "shimmer 2s linear infinite",
+        "fade-in": "fadeIn 0.8s ease-out forwards",
+        "slide-up": "slideUp 0.8s ease-out forwards",
+        "scale-in": "scaleIn 0.6s ease-out forwards",
+        "rotate-slow": "rotateSlow 20s linear infinite",
+        "pulse-glow": "pulseGlow 3s ease-in-out infinite",
+      },
+      keyframes: {
+        float: {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-20px)" },
+        },
+        shimmer: {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
+        },
+        fadeIn: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+        slideUp: {
+          "0%": { opacity: "0", transform: "translateY(40px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        scaleIn: {
+          "0%": { opacity: "0", transform: "scale(0.9)" },
+          "100%": { opacity: "1", transform: "scale(1)" },
+        },
+        rotateSlow: {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
+        pulseGlow: {
+          "0%, 100%": { boxShadow: "0 0 20px rgba(201, 169, 110, 0.3)" },
+          "50%": { boxShadow: "0 0 40px rgba(201, 169, 110, 0.6)" },
+        },
+      },
+      transitionTimingFunction: {
+        luxury: "cubic-bezier(0.23, 1, 0.32, 1)",
+        cinematic: "cubic-bezier(0.16, 1, 0.3, 1)",
+      },
+    },
+  },
+  plugins: [],
+};
+
+export default config;
