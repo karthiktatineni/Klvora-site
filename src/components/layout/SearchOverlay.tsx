@@ -6,6 +6,7 @@ import { Search, X, Mic, Camera, TrendingUp, Clock } from "lucide-react";
 import { PRODUCTS } from "@/lib/products";
 import Image from "next/image";
 import Link from "next/link";
+import { formatPrice } from "@/lib/utils";
 
 interface Props {
   isOpen: boolean;
@@ -128,7 +129,7 @@ export default function SearchOverlay({ isOpen, onClose }: Props) {
                         {product.category}
                       </p>
                       <h3 className="font-serif text-headline-sm text-primary truncate">{product.name}</h3>
-                      <p className="font-sans text-body-md text-on-surface-variant">${product.price.toLocaleString()}</p>
+                      <p className="font-sans text-body-md text-on-surface-variant">{formatPrice(product.price)}</p>
                     </div>
                   </Link>
                 ))}

@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { SlidersHorizontal, Grid3X3, LayoutList, X } from "lucide-react";
 import { PRODUCTS, CATEGORIES, COLLECTIONS } from "@/lib/products";
 import ProductCard from "@/components/product/ProductCard";
+import { formatPrice } from "@/lib/utils";
 import type { Metadata } from "next";
 
 const SORT_OPTIONS = [
@@ -84,7 +85,7 @@ export default function CollectionsPage() {
               <h3 className="font-sans text-label-caps uppercase tracking-[0.15em] text-on-surface mb-3">Price Range</h3>
               <div className="flex items-center gap-3">
                 <input type="range" min={0} max={5000} step={100} value={priceRange[1]} onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])} className="w-40 accent-primary" />
-                <span className="text-body-sm text-on-surface-variant">${priceRange[0]} — ${priceRange[1]}</span>
+                <span className="text-body-sm text-on-surface-variant">{formatPrice(priceRange[0])} — {formatPrice(priceRange[1])}</span>
               </div>
             </div>
             <div>

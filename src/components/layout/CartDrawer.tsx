@@ -5,6 +5,7 @@ import { X, Minus, Plus, ShoppingBag } from "lucide-react";
 import { useCartStore } from "@/store/useStore";
 import Image from "next/image";
 import Link from "next/link";
+import { formatPrice } from "@/lib/utils";
 
 interface Props {
   isOpen: boolean;
@@ -94,7 +95,7 @@ export default function CartDrawer({ isOpen, onClose }: Props) {
                         {item.selectedColor} · {item.selectedSize}
                       </p>
                       <p className="font-sans text-body-md text-primary mt-1 font-medium">
-                        ${(item.product.price * item.quantity).toLocaleString()}
+                        {formatPrice(item.product.price * item.quantity)}
                       </p>
                       <div className="flex items-center gap-3 mt-2">
                         <button
@@ -139,7 +140,7 @@ export default function CartDrawer({ isOpen, onClose }: Props) {
                 {/* Totals */}
                 <div className="flex justify-between items-center">
                   <span className="text-body-md text-on-surface-variant">Subtotal</span>
-                  <span className="font-serif text-headline-sm text-primary">${totalPrice().toLocaleString()}</span>
+                  <span className="font-serif text-headline-sm text-primary">{formatPrice(totalPrice())}</span>
                 </div>
                 <p className="text-body-sm text-on-surface-variant/50">Shipping calculated at checkout</p>
                 <Link

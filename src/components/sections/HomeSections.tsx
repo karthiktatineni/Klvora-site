@@ -5,6 +5,7 @@ import { PRODUCTS } from "@/lib/products";
 import ProductCard from "@/components/product/ProductCard";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { formatPrice } from "@/lib/utils";
 
 export function NewArrivals() {
   const items = PRODUCTS.filter((p) => p.isNew).slice(0, 4);
@@ -58,7 +59,7 @@ export function EditorialShowcase() {
               <h3 className="font-serif text-headline-sm text-primary mb-2">The Obsidian Tote</h3>
               <p className="text-body-sm text-on-surface-variant mb-3">Crafted from flawless matte leather, embodying the theatricality of silence.</p>
               <div className="flex items-center justify-between border-t border-outline-variant/30 pt-3">
-                <span className="text-body-md text-primary font-medium">$1,250</span>
+                <span className="text-body-md text-primary font-medium">{formatPrice(1250)}</span>
                 <Link href="/product/obsidian-tote" className="font-sans text-ui-button uppercase tracking-[0.05em] bg-primary text-on-primary px-5 py-1.5 hover:bg-secondary transition-colors text-[11px]">Discover</Link>
               </div>
             </div>

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useProductStore, OrderStatus } from "@/store/useAdminStore";
 import { PRODUCTS } from "@/lib/products";
-import { Package, TrendingUp, Users, DollarSign, Search, Edit2, Box, LogOut } from "lucide-react";
+import { Package, TrendingUp, Users, IndianRupee, Search, Edit2, Box, LogOut } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
 
 import { auth } from "@/lib/firebase";
@@ -113,7 +113,7 @@ export default function AdminDashboard() {
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
           {[
-            { label: "Total Revenue", value: formatPrice(totalRevenue), icon: DollarSign },
+            { label: "Total Revenue", value: formatPrice(totalRevenue), icon: IndianRupee },
             { label: "Active Orders", value: orders.filter(o => o.status !== "Delivered").length, icon: Package },
             { label: "Total Customers", value: new Set(orders.map(o => o.customer?.email)).size, icon: Users },
             { label: "Avg. Order Value", value: orders.length ? formatPrice(totalRevenue / orders.length) : formatPrice(0), icon: TrendingUp },
