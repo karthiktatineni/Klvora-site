@@ -85,6 +85,8 @@ export default function Footer() {
                         link === "New Arrivals" || link === "Bestsellers" || link === "Collections" || link === "Sale" ? "/collections" :
                         link === "Our Story" || link === "Sustainability" || link === "Craftsmanship" ? "/editorial" :
                         link === "Shipping" || link === "Returns" ? "/faq" :
+                        link === "Privacy Policy" ? "/privacy" :
+                        link === "Terms of Service" ? "/terms" :
                         "#"
                       }
                       className="font-sans text-body-sm text-silver-chrome/50 hover:text-frost transition-colors"

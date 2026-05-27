@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { Product } from "@/lib/products";
+import { PRODUCTS, type Product } from "@/lib/products";
+import { getProducts, createProduct, updateProductDB, deleteProductDB } from "@/lib/supabase";
 
 /* ─── Cart ─── */
 export interface CartItem {
@@ -13,8 +14,8 @@ export interface CartItem {
 interface CartState {
   items: CartItem[];
   addItem: (item: CartItem) => void;
-  removeItem: (productId: string) => void;
-  updateQuantity: (productId: string, qty: number) => void;
+  removeItem: (productId: string, color?: string, size?: string) => void;
+  updateQuantity: (productId: string, qty: number, color?: string, size?: string) => void;
   clearCart: () => void;
   totalItems: () => number;
   totalPrice: () => number;
@@ -45,12 +46,25 @@ export const useCartStore = create<CartState>()(
           }
           return { items: [...s.items, item] };
         }),
-      removeItem: (id) =>
-        set((s) => ({ items: s.items.filter((i) => i.product.id !== id) })),
-      updateQuantity: (id, qty) =>
+      removeItem: (id, color, size) =>
+        set((s) => ({
+          items: s.items.filter(
+            (i) =>
+              !(
+                i.product.id === id &&
+                (!color || i.selectedColor === color) &&
+                (!size || i.selectedSize === size)
+              )
+          ),
+        })),
+      updateQuantity: (id, qty, color, size) =>
         set((s) => ({
           items: s.items.map((i) =>
-            i.product.id === id ? { ...i, quantity: Math.max(1, qty) } : i
+            i.product.id === id &&
+            (!color || i.selectedColor === color) &&
+            (!size || i.selectedSize === size)
+              ? { ...i, quantity: Math.max(1, qty) }
+              : i
           ),
         })),
       clearCart: () => set({ items: [] }),
@@ -122,11 +136,15 @@ interface UIState {
   isMobileMenuOpen: boolean;
   isDarkMode: boolean;
   toast: { message: string; visible: boolean } | null;
+  activePreviewProduct: Product | null;
+  isChatOpen: boolean;
   setCartOpen: (v: boolean) => void;
   setSearchOpen: (v: boolean) => void;
   setMobileMenuOpen: (v: boolean) => void;
   toggleDarkMode: () => void;
   showToast: (message: string) => void;
+  setPreviewProduct: (product: Product | null) => void;
+  setChatOpen: (v: boolean) => void;
 }
 
 export const useUIStore = create<UIState>()(
@@ -137,6 +155,8 @@ export const useUIStore = create<UIState>()(
       isMobileMenuOpen: false,
       isDarkMode: false,
       toast: null,
+      activePreviewProduct: null,
+      isChatOpen: false,
       setCartOpen: (v) => set({ isCartOpen: v }),
       setSearchOpen: (v) => set({ isSearchOpen: v }),
       setMobileMenuOpen: (v) => set({ isMobileMenuOpen: v }),
@@ -145,6 +165,8 @@ export const useUIStore = create<UIState>()(
         set({ toast: { message, visible: true } });
         setTimeout(() => set({ toast: null }), 3000);
       },
+      setPreviewProduct: (product) => set({ activePreviewProduct: product }),
+      setChatOpen: (v) => set({ isChatOpen: v }),
     }),
     { 
       name: "klvora-ui",
@@ -153,4 +175,51 @@ export const useUIStore = create<UIState>()(
       }),
     }
   )
+);
+
+/* ─── Product Catalog Store ─── */
+interface CatalogState {
+  products: Product[];
+  isLoading: boolean;
+  fetchProducts: () => Promise<void>;
+  addProduct: (p: Omit<Product, "created_at" | "updated_at">) => Promise<void>;
+  removeProduct: (id: string) => Promise<void>;
+  updateProduct: (p: Partial<Product> & { id: string }) => Promise<void>;
+}
+
+export const useCatalogStore = create<CatalogState>()(
+  (set) => ({
+    // Initialize with local static products as fallback to prevent layout shift during SSR/hydration
+    products: PRODUCTS,
+    isLoading: false,
+    fetchProducts: async () => {
+      set({ isLoading: true });
+      try {
+        const data = await getProducts();
+        if (data && data.length > 0) {
+          set({ products: data, isLoading: false });
+        } else {
+          // Keep fallback products if database is empty
+          set({ isLoading: false });
+        }
+      } catch (err) {
+        console.error("Failed to load products from DB", err);
+        set({ isLoading: false });
+      }
+    },
+    addProduct: async (p) => {
+      const newP = await createProduct(p);
+      set((s) => ({ products: [newP, ...s.products] }));
+    },
+    removeProduct: async (id) => {
+      await deleteProductDB(id);
+      set((s) => ({ products: s.products.filter((item) => item.id !== id) }));
+    },
+    updateProduct: async (p) => {
+      const updatedP = await updateProductDB(p.id, p);
+      set((s) => ({
+        products: s.products.map((item) => (item.id === p.id ? { ...item, ...updatedP } : item)),
+      }));
+    },
+  })
 );

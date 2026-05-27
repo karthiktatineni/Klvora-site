@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useMemo, Suspense } from "react";
-import { PRODUCTS } from "@/lib/products";
+import { useCatalogStore } from "@/store/useStore";
 import ProductCard from "@/components/product/ProductCard";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -10,16 +10,17 @@ import Link from "next/link";
 function SearchResults() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q")?.toLowerCase() || "";
+  const products = useCatalogStore((s) => s.products);
 
   const filteredProducts = useMemo(() => {
     if (!query) return [];
-    return PRODUCTS.filter((p) => 
+    return products.filter((p) => 
       p.name.toLowerCase().includes(query) || 
       p.category.toLowerCase().includes(query) ||
       p.brand.toLowerCase().includes(query) ||
       p.description.toLowerCase().includes(query)
     );
-  }, [query]);
+  }, [query, products]);
 
   return (
     <div className="pt-28 pb-20 min-h-screen max-w-[1440px] mx-auto px-6 md:px-16">

@@ -1,14 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { PRODUCTS } from "@/lib/products";
+import { useCatalogStore } from "@/store/useStore";
 import ProductCard from "@/components/product/ProductCard";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { formatPrice } from "@/lib/utils";
 
 export function NewArrivals() {
-  const items = PRODUCTS.filter((p) => p.isNew).slice(0, 4);
+  const products = useCatalogStore((s) => s.products);
+  const items = products.filter((p) => p.isNew).slice(0, 4);
   return (
     <section className="py-24 md:py-32 px-6 md:px-16 max-w-[1440px] mx-auto" id="new-arrivals">
       <div className="flex items-end justify-between mb-12">
@@ -28,7 +29,8 @@ export function NewArrivals() {
 }
 
 export function TrendingProducts() {
-  const items = PRODUCTS.filter((p) => p.isTrending).slice(0, 4);
+  const products = useCatalogStore((s) => s.products);
+  const items = products.filter((p) => p.isTrending).slice(0, 4);
   return (
     <section className="py-24 md:py-32 px-6 md:px-16 max-w-[1440px] mx-auto" id="trending">
       <div className="flex items-end justify-between mb-12">
@@ -52,22 +54,13 @@ export function EditorialShowcase() {
     <section className="py-24 md:py-32 relative overflow-hidden" id="editorial-showcase">
       <div className="max-w-[1440px] mx-auto px-6 md:px-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          <motion.div initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="lg:col-span-7 relative aspect-[4/3] overflow-hidden bg-surface-container-low group cursor-pointer">
-            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRH9wAlWRVvWhwaD8Dc3mD9m_L4s7HaLVoo2GxFCObQYCyu1oLRo5z6iC1-OqOEvCEAYpp2uY4THMYwpWJ1hNjpoAeEwuv5cE0vz72RnMDQhShV-ihY2-MadWPRlp-PrnCvNeT3IcCHt4XJ-g4iad9bru826_cL0VYYhzlpDu1fUnBo1ot0hKSm8Wo5FHIoVJphJ96W4Lhx_RWAdSDJg0Fr88vMVxO-AwlqUkOIZgVcSwalbKzLs8H_RhSHcM0T82tW2WCVnoHI9o" alt="Editorial fashion showcase" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
-            <div className="absolute bottom-6 left-6 glass-light rounded-xl p-5 max-w-xs opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-              <p className="font-sans text-label-caps uppercase tracking-[0.15em] text-primary/70 mb-1">01 / Archive</p>
-              <h3 className="font-serif text-headline-sm text-primary mb-2">The Obsidian Tote</h3>
-              <p className="text-body-sm text-on-surface-variant mb-3">Crafted from flawless matte leather, embodying the theatricality of silence.</p>
-              <div className="flex items-center justify-between border-t border-outline-variant/30 pt-3">
-                <span className="text-body-md text-primary font-medium">{formatPrice(1250)}</span>
-                <Link href="/product/obsidian-tote" className="font-sans text-ui-button uppercase tracking-[0.05em] bg-primary text-on-primary px-5 py-1.5 hover:bg-secondary transition-colors text-[11px]">Discover</Link>
-              </div>
-            </div>
+          <motion.div initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="lg:col-span-7 relative aspect-[4/3] overflow-hidden bg-surface-container-low group">
+            <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1200&auto=format&fit=crop&q=80" alt="Streetwear fashion showcase" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
           </motion.div>
           <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2 }} className="lg:col-span-5 flex flex-col justify-center lg:pl-8">
             <div className="w-16 h-px bg-primary mb-8" />
-            <h2 className="font-serif text-headline-lg text-primary mb-6">Structured Minimalism</h2>
-            <p className="font-sans text-body-lg text-on-surface-variant mb-8 leading-relaxed">Our approach strips away the unnecessary, leaving only the essential. Every curve is deliberate, every texture selected to interact with light.</p>
+            <h2 className="font-serif text-headline-lg text-primary mb-6">Streetwear Evolution</h2>
+            <p className="font-sans text-body-lg text-on-surface-variant mb-8 leading-relaxed">Redefining everyday wear. We blend high-fashion aesthetics with raw, utilitarian street culture to create pieces that speak for themselves.</p>
             <Link href="/collections" className="font-sans text-ui-button uppercase tracking-[0.05em] border border-primary text-primary px-8 py-3 w-max hover:bg-primary hover:text-on-primary transition-colors">View Collection</Link>
           </motion.div>
         </div>
@@ -107,7 +100,8 @@ export function BrandStory() {
 }
 
 export function Bestsellers() {
-  const items = PRODUCTS.filter((p) => p.isBestseller).slice(0, 4);
+  const products = useCatalogStore((s) => s.products);
+  const items = products.filter((p) => p.isBestseller).slice(0, 4);
   return (
     <section className="py-24 md:py-32 px-6 md:px-16 max-w-[1440px] mx-auto" id="bestsellers">
       <div className="flex items-end justify-between mb-12">

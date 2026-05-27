@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default function CartDrawer({ isOpen, onClose }: Props) {
-  const { items, removeItem, updateQuantity, totalPrice } = useCartStore();
+  const { items, removeItem, updateQuantity, totalPrice, clearCart } = useCartStore();
 
   return (
     <AnimatePresence>
@@ -46,13 +46,24 @@ export default function CartDrawer({ isOpen, onClose }: Props) {
                   ({items.length} {items.length === 1 ? "item" : "items"})
                 </span>
               </div>
-              <button
-                onClick={onClose}
-                className="p-1 text-on-surface-variant hover:text-primary transition-colors"
-                aria-label="Close cart"
-              >
-                <X size={20} />
-              </button>
+              <div className="flex items-center gap-4">
+                {items.length > 0 && (
+                  <button
+                    onClick={clearCart}
+                    className="text-xs uppercase tracking-widest text-red-500 hover:text-red-600 transition-colors font-bold font-sans"
+                    title="Clear shopping bag"
+                  >
+                    Clear All
+                  </button>
+                )}
+                <button
+                  onClick={onClose}
+                  className="p-1 text-on-surface-variant hover:text-primary transition-colors"
+                  aria-label="Close cart"
+                >
+                  <X size={20} />
+                </button>
+              </div>
             </div>
 
             {/* Items */}
@@ -99,20 +110,20 @@ export default function CartDrawer({ isOpen, onClose }: Props) {
                       </p>
                       <div className="flex items-center gap-3 mt-2">
                         <button
-                          onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
+                          onClick={() => updateQuantity(item.product.id, item.quantity - 1, item.selectedColor, item.selectedSize)}
                           className="w-7 h-7 rounded-full border border-outline-variant/30 flex items-center justify-center text-on-surface-variant hover:border-primary transition-colors"
                         >
                           <Minus size={12} />
                         </button>
                         <span className="text-body-sm text-primary font-medium w-4 text-center">{item.quantity}</span>
                         <button
-                          onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
+                          onClick={() => updateQuantity(item.product.id, item.quantity + 1, item.selectedColor, item.selectedSize)}
                           className="w-7 h-7 rounded-full border border-outline-variant/30 flex items-center justify-center text-on-surface-variant hover:border-primary transition-colors"
                         >
                           <Plus size={12} />
                         </button>
                         <button
-                          onClick={() => removeItem(item.product.id)}
+                          onClick={() => removeItem(item.product.id, item.selectedColor, item.selectedSize)}
                           className="ml-auto text-body-sm text-on-surface-variant/40 hover:text-red-500 transition-colors underline"
                         >
                           Remove

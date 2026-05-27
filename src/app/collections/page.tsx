@@ -3,7 +3,8 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { SlidersHorizontal, Grid3X3, LayoutList, X } from "lucide-react";
-import { PRODUCTS, CATEGORIES, COLLECTIONS } from "@/lib/products";
+import { CATEGORIES, COLLECTIONS } from "@/lib/products";
+import { useCatalogStore } from "@/store/useStore";
 import ProductCard from "@/components/product/ProductCard";
 import { formatPrice } from "@/lib/utils";
 import type { Metadata } from "next";
@@ -22,9 +23,10 @@ export default function CollectionsPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [priceRange, setPriceRange] = useState([0, 5000]);
   const [gridCols, setGridCols] = useState(3);
+  const products = useCatalogStore((s) => s.products);
 
   const filtered = useMemo(() => {
-    let items = [...PRODUCTS];
+    let items = [...products];
     if (selectedCategory !== "All") items = items.filter((p) => p.category === selectedCategory);
     items = items.filter((p) => p.price >= priceRange[0] && p.price <= priceRange[1]);
     switch (sortBy) {
@@ -35,7 +37,7 @@ export default function CollectionsPage() {
       default: items.sort((a, b) => (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0));
     }
     return items;
-  }, [selectedCategory, sortBy, priceRange]);
+  }, [selectedCategory, sortBy, priceRange, products]);
 
   return (
     <div className="pt-28 pb-20 min-h-screen">

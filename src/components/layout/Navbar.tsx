@@ -3,23 +3,29 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, ShoppingBag, Heart, User, Menu, X, Sun, Moon } from "lucide-react";
-import { useCartStore, useWishlistStore, useUIStore } from "@/store/useStore";
+import { Search, ShoppingBag, Heart, User, Menu, X, Sun, Moon, MessageSquare } from "lucide-react";
+import { useCartStore, useWishlistStore, useUIStore, useCatalogStore } from "@/store/useStore";
 import SearchOverlay from "./SearchOverlay";
 import CartDrawer from "./CartDrawer";
 
 const NAV_LINKS = [
-  { label: "Showroom", href: "/collections" },
-  { label: "Archives", href: "/archives" },
+
+
   { label: "Editorial", href: "/editorial" },
   { label: "Track Order", href: "/orders" },
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const { isCartOpen, setCartOpen, isSearchOpen, setSearchOpen, isMobileMenuOpen, setMobileMenuOpen, isDarkMode, toggleDarkMode } = useUIStore();
+  const { isCartOpen, setCartOpen, isSearchOpen, setSearchOpen, isMobileMenuOpen, setMobileMenuOpen, isDarkMode, toggleDarkMode, setChatOpen } = useUIStore();
   const cartItems = useCartStore((s) => s.items);
   const wishlistItems = useWishlistStore((s) => s.items);
+  const fetchProducts = useCatalogStore((s) => s.fetchProducts);
+
+  useEffect(() => {
+    // Fetch products from Supabase on app load
+    fetchProducts();
+  }, [fetchProducts]);
 
   useEffect(() => {
     if (isDarkMode) {
@@ -43,11 +49,10 @@ export default function Navbar() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
-        className={`fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-[1440px] rounded-full z-50 transition-all duration-500 ${
-          scrolled
-            ? "bg-white/70 dark:bg-midnight-navy/70 shadow-cinematic border-[0.5px] border-outline-variant/40"
-            : "bg-white/10 dark:bg-black/10 border-[0.5px] border-outline-variant/20"
-        } backdrop-blur-xl`}
+        className={`fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-[1440px] rounded-full z-50 transition-all duration-500 ${scrolled
+          ? "bg-white/70 dark:bg-midnight-navy/70 shadow-cinematic border-[0.5px] border-outline-variant/40"
+          : "bg-white/10 dark:bg-black/10 border-[0.5px] border-outline-variant/20"
+          } backdrop-blur-xl`}
         id="main-navbar"
       >
         <div className="flex justify-between items-center px-6 md:px-8 py-3.5">
@@ -124,6 +129,16 @@ export default function Navbar() {
             </button>
 
             <button
+              onClick={() => setChatOpen(true)}
+              className="hover:opacity-70 transition-opacity duration-300 p-1"
+              aria-label="Support AI assistant"
+              id="chatbot-trigger"
+              title="Support AI Assistant"
+            >
+              <MessageSquare size={20} className="text-primary" />
+            </button>
+
+            <button
               onClick={toggleDarkMode}
               className="hover:opacity-70 transition-opacity duration-300 p-1 hidden md:block"
               aria-label="Toggle theme"
@@ -185,13 +200,17 @@ export default function Navbar() {
       {/* Mobile Bottom Navigation */}
       <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-white/80 dark:bg-midnight-navy/80 backdrop-blur-xl border-t border-outline-variant/20 px-4 py-2 flex justify-around items-center">
         <Link href="/" className="flex flex-col items-center gap-0.5 text-primary/60 hover:text-primary transition-colors">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
           <span className="text-[10px] font-semibold tracking-wider uppercase">Home</span>
         </Link>
         <Link href="/collections" className="flex flex-col items-center gap-0.5 text-primary/60 hover:text-primary transition-colors">
           <Search size={20} />
           <span className="text-[10px] font-semibold tracking-wider uppercase">Explore</span>
         </Link>
+        <button onClick={() => setChatOpen(true)} className="flex flex-col items-center gap-0.5 text-primary/60 hover:text-primary transition-colors">
+          <MessageSquare size={20} />
+          <span className="text-[10px] font-semibold tracking-wider uppercase">Support</span>
+        </button>
         <Link href="/wishlist" className="flex flex-col items-center gap-0.5 text-primary/60 hover:text-primary transition-colors relative">
           <Heart size={20} />
           {wishlistItems.length > 0 && (

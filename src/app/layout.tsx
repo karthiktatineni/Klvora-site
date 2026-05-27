@@ -7,6 +7,7 @@ import SmoothScroll from "@/components/providers/SmoothScroll";
 import GoogleAnalytics from "@/components/providers/GoogleAnalytics";
 import Toast from "@/components/ui/Toast";
 import ChatBot from "@/components/ai/ChatBot";
+import ProductPreviewModal from "@/components/product/ProductPreviewModal";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import StickyToastRemover from "@/components/providers/StickyToastRemover";
@@ -152,6 +153,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <StickyToastRemover />
         <Toast />
         <Navbar />
+        <ProductPreviewModal />
         <main className="min-h-screen">{children}</main>
         <Footer />
         <ChatBot />

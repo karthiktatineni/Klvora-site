@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Heart, ShoppingBag, Eye } from "lucide-react";
 import type { Product } from "@/lib/products";
-import { useWishlistStore, useCartStore } from "@/store/useStore";
+import { useWishlistStore, useCartStore, useUIStore } from "@/store/useStore";
 import { formatPrice } from "@/lib/utils";
 
 interface Props {
@@ -17,6 +17,7 @@ interface Props {
 export default function ProductCard({ product, index = 0, variant = "default" }: Props) {
   const { toggle, isWished } = useWishlistStore();
   const addItem = useCartStore((s) => s.addItem);
+  const setPreviewProduct = useUIStore((s) => s.setPreviewProduct);
   const wished = isWished(product.id);
 
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -29,6 +30,12 @@ export default function ProductCard({ product, index = 0, variant = "default" }:
     e.preventDefault();
     e.stopPropagation();
     toggle(product);
+  };
+
+  const handleQuickView = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setPreviewProduct(product);
   };
 
   return (
@@ -52,7 +59,9 @@ export default function ProductCard({ product, index = 0, variant = "default" }:
               <button onClick={handleToggleWish} className={`w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-md transition-colors ${wished ? "bg-red-500 text-white" : "bg-white/90 text-primary"}`}>
                 <Heart size={13} fill={wished ? "currentColor" : "none"} />
               </button>
-              <span className="w-8 h-8 rounded-full bg-white/90 backdrop-blur-md text-primary flex items-center justify-center"><Eye size={13} /></span>
+              <button onClick={handleQuickView} className="w-8 h-8 rounded-full bg-white/90 backdrop-blur-md text-primary flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors" title="Quick View">
+                <Eye size={13} />
+              </button>
             </div>
           </div>
         </div>

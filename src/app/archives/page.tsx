@@ -3,10 +3,12 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { COLLECTIONS, PRODUCTS } from "@/lib/products";
+import { COLLECTIONS } from "@/lib/products";
+import { useCatalogStore } from "@/store/useStore";
 import ProductCard from "@/components/product/ProductCard";
 
 export default function ArchivesPage() {
+  const products = useCatalogStore((s) => s.products);
   return (
     <div className="pt-28 pb-20 min-h-screen">
       <div className="max-w-[1440px] mx-auto px-6 md:px-16">
@@ -28,8 +30,8 @@ export default function ArchivesPage() {
             >
               <Link href="/collections" className="group block relative overflow-hidden bg-surface-container-low rounded-xl aspect-[4/3]">
                 <div className="absolute inset-0 bg-gradient-to-t from-midnight-navy/60 via-midnight-navy/20 to-transparent z-10" />
-                {PRODUCTS[i % PRODUCTS.length] && (
-                  <Image src={PRODUCTS[i % PRODUCTS.length].images[0]} alt={collection.name} fill className="object-cover transition-transform duration-700 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 33vw" />
+                {products[i % products.length] && (
+                  <Image src={products[i % products.length].images[0]} alt={collection.name} fill className="object-cover transition-transform duration-700 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 33vw" />
                 )}
                 <div className="absolute bottom-6 left-6 z-20">
                   <h3 className="font-serif text-headline-sm text-frost mb-1">{collection.name}</h3>
@@ -45,7 +47,7 @@ export default function ArchivesPage() {
         <div>
           <h2 className="font-serif text-headline-lg text-primary mb-8">Full Archive</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {PRODUCTS.map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}
+            {products.map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}
           </div>
         </div>
       </div>

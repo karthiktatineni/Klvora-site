@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, X, Mic, Camera, TrendingUp, Clock } from "lucide-react";
-import { PRODUCTS } from "@/lib/products";
+import { useCatalogStore } from "@/store/useStore";
 import Image from "next/image";
 import Link from "next/link";
 import { formatPrice } from "@/lib/utils";
@@ -18,9 +18,10 @@ const TRENDING = ["Obsidian Tote", "Lumen Collection", "Silk Scarves", "Gold Jew
 export default function SearchOverlay({ isOpen, onClose }: Props) {
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const products = useCatalogStore((s) => s.products);
 
   const filtered = query.length > 1
-    ? PRODUCTS.filter(
+    ? products.filter(
         (p) =>
           p.name.toLowerCase().includes(query.toLowerCase()) ||
           p.category.toLowerCase().includes(query.toLowerCase()) ||
